@@ -1,9 +1,20 @@
+body{
+	background: url('../images/notepad2.jpg');
+	font-family: 'Raleway', sans-serif;
+  font-size: 15px;
+  background-repeat: no-repeat;
+  background-size: relative;
+}
+
 header {
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
   top: 0; left: 0; right: 0;
 }
 
+.jumbtotron {
+  opacity: 0.10;
+}
 
 .btn-primary,.reset{
 	background-color: #313477;
@@ -22,8 +33,26 @@ header {
 	background-color: #202364;
 }
 
-#card-img-top {
-  padding: 20px;
-  
 
+
+h2, #message, #finalMessage{
+	font-family: Sigmar One;
+}
+
+.thisChoice:hover{
+	background-color: #202364;
+	color: white;
+	padding: 10px;
+}
+
+#gif{
+	margin: 30px;
+}
+
+@media screen and (max-width:640px){
+	.container{
+		width: 500px;
+		margin-top: 200px;
+		size: 200%;
+	}	
 }
