@@ -1,0 +1,29 @@
+header {
+  width: 100%;
+  margin-bottom: 20px;
+  top: 0; left: 0; right: 0;
+}
+
+
+.btn-primary,.reset{
+	background-color: #313477;
+	color: white;
+	font-family: 'Sigmar One', sans-serif;
+	font-size: 30px;
+	padding: 20px;
+	margin-top: 100px;
+}
+
+.btn-primary:hover, .reset:hover{
+	background-color: pink;
+}
+
+.btn-primary:hover, .reset:hover{
+	background-color: #202364;
+}
+
+#card-img-top {
+  padding: 20px;
+  
+
+}

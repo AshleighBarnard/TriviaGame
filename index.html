@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <!-- integrating bootstrap 4 -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
+  <!-- font awesome comes to the party -->
+  <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+  <!-- attaching reset -->
+  <link href="assets/css/reset.css" rel="stylesheet">
+  <!-- attaching mystylesheet -->
+  <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+
+
+
+  <title>Ashleigh's Trivia Madness</title>
+</head>
+
+<body>
+
+  <header>
+
+    <img src='assets/images/header.png' alt='headerImg' width='100%'>
+    
+  </header>
+
+  <div class="container">
+    <div id="row1">
+      <div class="col-md-3">
+
+        <div class="card">
+          <img class="card-img-top" src="assets/images/kitten.jpg" alt="Card image cap">
+          <div class="card-block">
+            <h4 class="card-title">Getting Started</h4>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href="#" class="btn btn-primary"></i>PLAY!</a>
+          
+
+          </div>
+        </div>
+      </div>
+      <div class='container'>
+      <div class="col-md-8">
+      
+              <button class='btn btn-primary' id='startBtn'>Start</button>
+              <!-- Question page -->
+              <div id=timeLeft></div>
+              <div id=currentQuestion></div>
+              <div class='question'></div>
+              <div class='answerList'></div>
+              <!-- Answer Page -->
+              <div id=message></div>
+              <div id=correctedAnswer></div>
+              <div id=gif></div>
+              <!-- Scoreboard -->
+              <div id=finalMessage></div>
+              <div id=correctAnswers></div>
+              <div id=incorrectAnswers></div>
+              <div id=unanswered></div>
+              <div id='startOverBtn'></div>
+          </div>
+      </div>
+
+    </div>
+
+
+  </div>
+
+
+
+  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+</body>
+
+</html>
