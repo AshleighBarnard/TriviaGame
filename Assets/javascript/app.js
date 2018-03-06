@@ -1,226 +1,271 @@
 $(document).ready(function() {
+	var quoteLoading = {
+			words: [],
+			author: []
+		};
+	var quote = {
+			words: [],
+			author: []
+		};
+	var counterQuotes = 0;
+	var first = true;
+	var interval;
+	var questionNumber=1;
+	var time = 30;
+	var isRunning = false;
+	var randomNum;
+	var pictureURL;
+	var picture;
+	var counterCorrect = 0;
+	var counterIncorrect = 0;
+	var counterUnanswered = 0;
+	var rounds = 10;
+	var colors = ['#16a085', '#27ae60', '#2c3e50', '#f39c12', '#e74c3c', '#9b59b6', '#FB6964', '#342224', "#472E32", "#BDBB99", "#77B1A9", "#73A857"];
+	var numColor;
 
-  // Collect Questions and Answers
+	// Get quotes
+	function generateFourQuotes() {
+		$.ajax({
+			headers: {
+				"X-Mashape-Key": "1r3SUQqvVMmsh7OI2X0f945OfE46p150Pt1jsnTWlWnhFjVEoy",
+	    	"Accept": "application/json",
+	    	"Content-Type": "application/x-www-form-urlencoded"
+			},
+			url: 'https://andruxnet-random-famous-quotes.p.mashape.com/?cat=movies',
+			dataType: 'json',
+			success: function(data) {
+				repeatedQuote: {
+					for(var i=0; i<quoteLoading.author.length; i++) {
+						if (data.author == quoteLoading.author[i] || data.author == 'Umberto Eco') {
+							break repeatedQuote;
+						}
+					}
+					quoteLoading.words.push(data.quote);
+					quoteLoading.author.push(data.author);
+					counterQuotes++;
+				}
+				if (counterQuotes < 4) generateFourQuotes();
+				else {
+					if (first) {
+						first = false;
+						$('header').append('<button class="start">Start</button>');
+						$('.start').css({
+							'background-color': colors[numColor],
+							'border-color': colors[numColor]
+						});
+						$('.start').on('mousedown',function() {
+							$('.start').off('mousedown');
+							animateTextAll();
+							animateColor();
+							setTimeout(start,500);
+						});
+					} else {
+						animateTextAll();
+						animateColor();
+						setTimeout(erase,500);
+					}
+				}
+			}
+		});
+	}
+	// Get giphy
+	function generateGiphy(randomNum, $this) {
+		var search = encodeURIComponent(quote.author[randomNum]).replace(/%20/g, '+');
+		$.ajax({
+			url: 'https://api.giphy.com/v1/gifs/search?limit=1&fmt=json&api_key=dc6zaTOxFJmzC&q=' + search,
+			success: function(data) {
+				pictureURL = data.data[0].images.fixed_height.url;
+				// Show answer
+				if ($this.attr('data-num') == randomNum) {
+					animateTextNot();
+					setTimeout(function() {
+						selection("true")
+					},500);
+				} else {
+					animateTextNot();
+					setTimeout(function() {
+						selection("false")
+					},500);
+				}
+			}
+		});
+	}
+	function selection(correct) {
+		// Turn off click
+		$('.answers').off('mousedown', 'a');
+		// Clear timer interval and change is running
+		clearInterval(interval);
+		isRunning = false;
+		// Remove all questions and answer
+		$('.question').remove();
+		$('.answers').remove();
+		// Show proper text for each situation
+		if (correct == 'true') {
+			counterCorrect++;
+			$('.holder').append('<h1>Correct!</h1>');
+		} else if (correct == 'false') {
+			counterIncorrect++;
+			$('.holder').append('<h1>Incorrect!</h1>');
+			$('.holder').append('<h2>The Correct Answer was: ' + quote.author[randomNum] + '</h2>');
+		} else {
+			counterUnanswered++;
+			$('.holder').append('<h1>Time is Up!</h1>');
+			$('.holder').append('<h2>The Correct Answer was: ' + quote.author[randomNum] + '</h2>');
+		}
+		$('.holder').append('<img id="img-load" src="' + pictureURL + '">');
+		// Wait for picture to load
+		$('#img-load').load(function() {
+			// Erase picture after 4 seconds
+			picture = setInterval(function() {
+				// Load reset counterQuotes and new quotes
+				counterQuotes = 0;
+				generateFourQuotes();
+			},4000);
+		});
+	}
+	function erase() {
+		// Clear interval
+		clearInterval(picture);
+		// Clear holder
+		$('.holder').empty();
+		// Check the rounds
+		if (counterCorrect+counterIncorrect+counterUnanswered < rounds) {
+			// Change question number
+			questionNumber++;
+			$('.holder').append('<div class="number">Quote: ' + questionNumber + '</div>');
+			// Reset timer
+			time = 30;
+			$('.holder').append('<div class="timer">Time Remaining: ' + time + '</div>');
+			if (!isRunning) {
+				timer();
+			}
+			// Readd question and answers divs
+			$('.holder').append('<div class="question"></div>');
+			$('.holder').append('<div class="answers"></div>');
+			// Show new questions
+			show();
+		} else {
+			$('.holder').append('<h1>All done, here\'s how you did!</h1>');
+			$('.holder').append('<h2>Correct Answers: ' + counterCorrect + '</h2>');
+			$('.holder').append('<h2>Incorrect Answers: ' + counterIncorrect + '</h2>');
+			$('.holder').append('<h2>Unanswered: ' + counterUnanswered + '</h2>');
+			$('.holder').append('<button class="start">Start Over?</button>');
+			$('.start').css({
+				'background-color': colors[numColor],
+				'border-color': colors[numColor]
+			});
+			// Reset counters
+			counterCorrect = 0;
+			counterIncorrect = 0;
+			counterUnanswered = 0;
+			// Allow player to restart
+			$('.start').on('mousedown',function() {
+				// Turn off click so multiple starts doesn't happen
+				$('.start').off('mousedown');
+				animateTextAll();
+				setTimeout(start,500);
+			});
+		}
+	}
+	function show() {
+		// Copy quotes over
+		quote = quoteLoading;
+		// Erase quote loading
+		quoteLoading = {
+			words: [],
+			author: []
+		};
+		// Select random quote of the four
+		randomNum = Math.floor((Math.random()*3)+1);
+		// Show random quote
+		$('.question').append('<p><i class="fa fa-quote-left"></i> ' + quote.words[randomNum] + ' <i class="fa fa-quote-right"></i></p>');
+		// Show all the of authors
+		for (var i=0; i<quote.words.length; i++) {
+			$('.answers').append('<a data-num="' + i + '">' + quote.author[i] + '</a>');
+		}
+		// Start click handler for selection
+		$('.answers').on('mousedown', 'a', function() {
+			$('.answers').off('mousedown', 'a');
+			// Ajax request for picture
+			var $this = $(this);
+			generateGiphy(randomNum, $this);
+		});
+	}
+	function timer() {
+		isRunning = true;
+		interval = setInterval(function() {
+			time--;
+			$('.timer').text('Time Remaining: ' + time);
+			if (time == 0) {
+				clearInterval(interval);
+				isRunning = false;
+				selection("time");
+			}
+		}, 1000);
+	}
+	function start() {
+    // Remove start button beginning
+		$('header').remove();
+		// Remove start button end
+		$('.holder').empty();
+		// Add the question number
+		$('.holder').append('<div class="number"></div>');
+		// Add the time
+		$('.holder').append('<div class="timer"></div>');
+		// Add questions
+		$('.holder').append('<div class="question"></div>');
+		// Add answers
+		$('.holder').append('<div class="answers"></div>');
+		// Show the question number
+		$('.number').text('Quote: ' + questionNumber);
+    // Show the time
+		$('.timer').text('Time Remaining: ' + time);
+		// Reset timer
+		time = 30;
+		$('.timer').text('Time Remaining: ' + time);
+		// Start timer
+		if (!isRunning) {
+			timer();
+		}
+    // Show the quotes
+		show();
+	}
+	
+	// Start with first request for quotes
+	generateFourQuotes();
 
-    // Show only New Game info on page load
-  $('.game').hide();
-  $('.results').hide();
-  // Create HTML for game
+	// Animation
+	function animateTextAll() {
+		$(".holder").animate({
+	    opacity: 0
+	  }, 500, function() {
+	  	$(this).animate({
+	      opacity: 1
+	    }, 500);
+	  });
+	}
+	function animateTextNot() {
+		$(".holder>*:not(.number):not(.timer)").animate({
+	    opacity: 0
+	  }, 500, function() {
+	  	$(this).animate({
+	      opacity: 1
+	    }, 500);
+	  });
+	}
 
-  // Set Variables
-  
-  var correct;
-  var wrong;
-  var answer;
-  var counter;
-  var count;
-  var timeout;
-  var i = 0;
-
-  var activeQuestion = {
-    question: "",
-    answer: '',
-    choices: [],
-  }
-
-var questions = {};
-function setQuestions() {
-  questions ={
-
-    q1: {
-      question: "What animal is the national emblem of Canada?",
-      answer: 'Beaver',
-      choices: ['Moose', 'Wolf', 'Beaver', 'Eagle'],
-     },
-
-     q2: {
-      question: "How many players are there in a baseball team?",
-      answer: '9',
-      choices: ['20', '12', '9', '10'],
-     },
-
-     q3: {
-      question: "What is the name of Batman's butler?",
-      answer: 'Alfred',
-      choices: ['Horris', 'Chipper', 'Alfred', 'Jeffry'],
-     },
-
-     q4: {
-      question: "The Pyrenees mountain range separates which two European countries?",
-      answer: 'France and Spain',
-      choices: ['Italy and Switzerland', 'Germany and Holland', 'Canada and The United States', 'America and Mexico'],
-     },
-
-     q5: {
-      question: "In Fahrenheit, at what temperature does water freeze?",
-      answer: '32 degrees Fahrenheit',
-      choices: ['13', '23', '31', '32'],
-     
-    },
-
-    q6: {
-     question: "The Statue of Liberty was given to the US by which country?",
-     answer: 'France',
-     choices: ['Canada', 'France', 'England', 'Japan'],
-    },
-
-    q7: {
-    question: "According to Greek mythology who was the first woman on earth?",
-    answer: 'Pandora',
-    choices: ['Pandora', 'Aphrodite', 'Helena', 'Eve'],
-   },
-
-    q8: {
-    question: "How many letters are there in the German alphabet?",
-    answer: '30',
-    choices: ['24', '26', '30', '70'],
-  },
-
-  q9: {
-    question: "According to legend, who led a gang of merry outlaws in Sherwood Forest in Nottingham, England?",
-    answer: 'Robin Hood',
-    choices: ['Batman', 'Arrow', 'Puss in Boots', 'Robin Hood'],
-  },
-  q10: {
-    question: "In which continent is the country of Egypt found?",
-    answer: 'Africa',
-    choices: ['Asia', 'Europe', 'Micronesia', 'Africa'],
-  },
-
-}
-};
-
- // Timer Settings
- var questionTimer = {
-  //Time Per Question
-  time: 15,
-  reset: function(t) {
-    questionTimer.time = t;
-    $('.timeLeft').html('Time Left: ' + questionTimer.time);
-  },
-  gameTimeout: function(){
-    timeout = setTimeout(questionTimer.timeUp, 1000*16);
-  },
-  count: function() {
-    $('.timeLeft').html('Time Left: ' +questionTimer.time);
-    questionTimer.time--;
-  },
-  countDown: function(){
-    counter = setInterval(questionTimer.count,1000);
-  },
-  stopTimer: function(){
-    clearInterval(counter);
-  },
-  timeUp: function(){
-    wrong++;
-    questionTimer.reset(5)
-    $('.answers').html('<h2>Incorrect! The answer is ' + activeQuestion.answer + ' </h2>');
-    setTimeout(game, 5000);
-  },
-};
-
-// Run this to make sure there are still questions left
-function gameOver() {
-  if (Object.keys(questions).length === 0) {
-    questionTimer.stopTimer();
-    $('.game').hide();
-    $('.results').show();
-    $('.correct').html('Number Correct: ' + correct);
-    $('.wrong').html('Number Incorrect: ' + wrong);
-    activeQuestion = false;
-  };
-};
-
-// Check if selected answer is correct or incorrect
-function answerCheck() {
-  if (answer == activeQuestion.answer && questionTimer.time > 0) {
-    correct++;
-    questionTimer.reset(5);
-    $('.answers').html('<h2>Correct! The answer is ' + activeQuestion.answer + ' </h2>');
-    setTimeout(game, 5000);   
-  }
-    
-  if (answer != activeQuestion.answer){
-    questionTimer.timeUp();
-  }
-}
-
- //Randomize order of possible answers
-function randomize() {
-  activeQuestion.choices.sort(function() { 
-    return 0.5 - Math.random(); 
-  });
-};
-
-// Starts up the game
-function game(){
-
-  // Checks to see if there are no more questions first
-  gameOver();
-
-  // If there are still questions left
-  if (Object.keys(questions).length > 0) {
-
-    // Get Question
-    var keys = Object.keys(questions);
-    var objIndex = keys[ keys.length * Math.random() << 0];
-    activeQuestion = questions[objIndex];
-
-    // Reorder the choices so it's not obvious
-    randomize();
-
-    // Delete question so it can't be pulled again
-    delete questions[objIndex];
-
-    // Empty out answer area from previous question
-    $('.answers').empty();
-
-    // Stop and Reset timer incase it was running
-    questionTimer.stopTimer();
-    questionTimer.reset(15);
-    questionTimer.gameTimeout()
-
-    // Start Timer
-    questionTimer.countDown();
-
-    // Place question information into .game area
-    $('.question').html(activeQuestion.question);
-    // Reset counter
-    i=0;
-
-    //Create buttons for possible answers
-    $(activeQuestion.choices).each(function() {
-    $('.answers').append('<button class="btn btn-lg option text-center">' + activeQuestion.choices[i] + '</button>');
-    i++;
-    });
-  }; 
-
-  // When you click on a possible answer
-  $('.option').on('click', function(){
-      answer = $(this).html();
-      answerCheck();
-      clearTimeout(timeout);
-    });
-};
-
- // New Game Function
-  // Resets score to zero
-  // Sets new time countdown
-function newGame() {
-  $('.results').hide();
-  // questions = questionInfo;
-  correct = 0;
-  wrong = 0;
-  $('.game').show();
-}
-
-
-$('.home').on('click','.start',function(){
-  setQuestions();
-  newGame();
-  
-  game();
-});
-    
+	function animateColor() {
+		numColor = Math.floor((Math.random() * colors.length)+1);
+		$('body').animate({
+			backgroundColor: colors[numColor],
+		  color: colors[numColor]
+		}, 1000);
+		$('.question').animate({
+			borderBottomColor: colors[numColor]
+		}, 1000);
+		$('a:hover').animate({
+			outlineColor: colors[numColor]
+		}, 1000);
+	}
 
 });
