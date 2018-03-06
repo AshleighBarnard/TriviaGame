@@ -11,6 +11,10 @@
   <link href="assets/css/reset.css" rel="stylesheet">
   <!-- attaching mystylesheet -->
   <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+  <!-- google fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Permanent+Marker" rel="stylesheet">
+
+
 
 
 
@@ -18,50 +22,22 @@
 </head>
 
 <body>
-
-  <header>
-      <div class="jumbotron jumbotron-fluid">
-          <div class="container">
-            <h1 class="display-4"> Trivia Game</h1>
-            <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
-          </div>
+    <div class="quizContainer" class="container">
+        <div class = "title"> Trivia Madness!</div>
+        <div id="question" class="question">
         </div>
+        <Label class= "Option"><input type="radio" name="option" value= "1" /> <span id="opt1"></span></Label>
+        <Label class= "Option"><input type="radio" name="option" value= "2" /> <span id="opt1"></span></Label>
+        <Label class= "Option"><input type="radio" name="option" value= "3" /> <span id="opt1"></span></Label>
+        <Label class= "Option"><input type="radio" name="option" value= "4" /> <span id="opt1"></span></Label>
+        </div>
+        
+
   
-    
-  </header>
 
-
-
-      <div class='container'>
-      <div class="col-md-8">
-      
-              <button class='btn btn-primary' id='startBtn'>Start</button>
-              <!-- Question page -->
-              <div id=timeLeft></div>
-              <div id=currentQuestion></div>
-              <div class='question'></div>
-              <div class='answerList'></div>
-              <!-- Answer Page -->
-              <div id=message></div>
-              <div id=correctedAnswer></div>
-              <div id=gif></div>
-              <!-- Scoreboard -->
-              <div id=finalMessage></div>
-              <div id=correctAnswers></div>
-              <div id=incorrectAnswers></div>
-              <div id=unanswered></div>
-              <div id='startOverBtn'></div>
-          </div>
-      </div>
-
-    </div>
-
-
-  </div>
-
-
-
-  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
+<script type="text/javascript" src="assets/javascript/app.js"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
 </body>

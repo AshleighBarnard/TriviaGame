@@ -1,181 +1,225 @@
-var triviaQuestions = [{
-	question: "In what year was Pixar founded?",
-	answerList: ["1979", "1986", "1995", "2000"],
-	answer: 1
-},{
-	question: "Which tech mogul provided funding and became a co-founder of Pixar?",
-	answerList: ["Steve Jobs", "Bill Gates", "Peter Thiel", "Mark Zuckerberg"],
-	answer: 0
-},{
-	question: "What was Pixar's first feature-length film that was released in 1995?",
-	answerList: ["Toy Story", "A Bug's Life", "Monster's Inc", "Finding Nemo"],
-	answer: 0
-},{
-	question: "Who was the first Pixar character added to the Disney Princess line-up?",
-	answerList: ["Jessie", "Repunzel", "Merida", "Elsa"],
-	answer: 2
-},{
-	question: "What's the name of Pixar's first short film, also known as their mascot?",
-	answerList: ["Lampo", "Junior", "Pixie", "Luxo Jr."],
-	answer: 3
-},{
-	question: "How many sequels does Pixar currently have released? (as of August 2016)",
-	answerList: ["5", "3", "6", "7"],
-	answer: 0
-},{
-	question: "Which film won Pixar's first Academy Award for Best Animated Feature?",
-	answerList: ["Toy Story", "Finding Nemo", "Up", "Wall-E"],
-	answer: 1
-},{
-	question: "Who directed Pixar's first three feature films?",
-	answerList: ["Peter Docter", "Brad Bird", "John Lasseter", "Peter Sohn"],
-	answer: 2
-},{
-	question: "Who voiced Sadness in 'Inside Out'?",
-	answerList: ["Amy Poehler", "Phyllis Smith", "Mindy Kaling", "Phyllis Vance"],
-	answer: 1
-},{
-	question: "Billy Crystal voices Mike Wazowski in 'Monster, Inc.' but what role did he originally turn down from Pixar?",
-	answerList: ["Hopper", "Woody", "Marlin", "Buzz Lightyear"],
-	answer: 3
-},{
-	question: "The voice of WALL-E, Ben Burtt, also voiced what other famous robot?",
-	answerList: ["R2-D2", "Alpha 5", "C-3PO", "Astro Boy"],
-	answer: 0
-},{
-	question: "Brad Bird directed which animated film prior to taking on 'The Incredibles'?",
-	answerList: ["The Brave Little Toaster", "The Iron Giant", "Tarzan", "The Prince of Egypt"],
-	answer: 1
-},{
-	question: "Pixar was originally a division of which studio?",
-	answerList: ["Dreamworks", "Industrial Light & Magic", "Disney", "Lucasfilm"],
-	answer: 3
-},{
-	question: "What is the name of the famour explorer from 'Up' that Carl looked up to as a boy?",
-	answerList: ["Charles F. Muntz", "Chuck M. James", "Charlie Rose", "Carl Carlton"],
-	answer: 0
-},{
-	question: "'A Bug's Life' was loosely based on what other film?",
-	answerList: ["I Live in Fear", "Rashomon", "Seven Samurai", "Magneficent Seven"],
-	answer: 2
-}];
+// Define variable
+  var count = 0;
+  var time = 31;
+  var isSelected = false;
+  var ticker;
+  var correct = 0;
+  var incorrect = 0;
+  var unanswered = 0;
 
-var gifArray = ['question1', 'question2', 'question3', 'question4', 'question5', 'question6', 'question7', 'question8', 'question9', 'question10', 'question11', 'question12', 'question13','question14','question15'];
-var currentQuestion; var correctAnswer; var incorrectAnswer; var unanswered; var seconds; var time; var answered; var userSelect;
-var messages = {
-	correct: "Yes, that's right!",
-	incorrect: "No, that's not it.",
-	endTime: "Out of time!",
-	finished: "Alright! Let's see how well you did."
-}
+// Questions and Answer Arrays
+  var question = ["What is Lord Voldemort's real name?",
+  "Who was Dumbledore's immediate predecessor as Headmaster or Headmistress at Hogwarts?", "Whose mother was Rowena Ravenclaw?", "What was Voldemort's mother's maiden name?", "How many points is the Golden Snitch worth?",
+  "What is the only antidote to Basilisk's venom?", "What is the symbol for Gryffindor house?", "Who destroyed the last remaining Horcrux?"];
+  var answer = ["Tom Marvolo Riddle", "Armando Dippet", "The Grey Lady", "Gaunt", "150", "Phoenix Tears", "A Lion", "Neville Longbottom", "A Lion", "Neville Longbottom"];
+  var firstChoice = ["Tom Marvolo Riddle", "Phineas Nigellus Black", "Moaning Myrtle", "Riddle", "50", "Phoenix Tears", "A Badger", "Ginny Weasley"];
+  var secondChoice = ["Gellert Grindelwald", "Dexter Fortescue", "Lily Potter", "Clearwater", "500", "Dragon's Blood", "An Eagle", "Neville Longbottom"];
+  var thirdChoice = ["Salazar Slytherin", "Armando Dippet", "The Grey Lady", "Peverell", "100", "Mandrake Draught", "A Lion", "Severus Snape"];
+  var fourthChoice = ["Morfin Gaunt", "Dilys Derwent", "The Fat Lady", "Gaunt", "150", "A Bezoard", "A Snake", "Viktor Krum"];
 
-$('#startBtn').on('click', function(){
-	$(this).hide();
-	newGame();
+// Show & Hide Functions
+  function showHolders() {
+      $("#question-holder").show();
+      $("#option1").show();
+      $("#choice-holder-2").show();
+      $("#choice-holder-3").show();
+      $("#choice-holder-4").show();
+  }
+  function hideHolders() {
+      $("#question-holder").hide();
+      $("#option1").hide();
+      $("#choice-holder-2").hide();
+      $("#choice-holder-3").hide();
+      $("#choice-holder-4").hide();
+  }
+  function hideResults() {
+      $("#correct-holder").hide();
+      $("#incorrect-holder").hide();
+      $("#unanswered-holder").hide();
+      $("#restart-holder").hide();
+  }
+  function displayQuestion () {
+      hideResults();
+      $("#answer-holder").hide();
+      $("#image-holder").hide();
+      $("#time-holder").show();
+      showHolders();
+      $("#question-holder").html(question[count]);
+      $("#option1").html(firstChoice[count]);
+      $("#choice-holder-2").html(secondChoice[count]);
+      $("#choice-holder-3").html(thirdChoice[count]);
+      $("#choice-holder-4").html(fourthChoice[count]);
+  
+  // Hover CSS
+      $("#option1").hover(function() {
+          $(this).css("color", "gray");
+      },
+      function(){
+          $(this).css("color", "black");
+      });
+      $("#choice-holder-2").hover(function() {
+          $(this).css("color", "gray");
+      },
+      function(){
+          $(this).css("color", "black");
+      });
+      $("#choice-holder-3").hover(function() {
+          $(this).css("color", "gray");
+      },
+      function(){
+          $(this).css("color", "black");
+      });
+      $("#choice-holder-4").hover(function() {
+          $(this).css("color", "gray");
+      },
+      function(){
+          $(this).css("color", "black");
+      });
+  }
+  $("#option1").on("click", checkAnswer);
+  $("#choice-holder-2").on("click", checkAnswer);
+  $("#choice-holder-3").on("click", checkAnswer);
+  $("#choice-holder-4").on("click", checkAnswer);
+
+// Check Answer Function
+  function checkAnswer() {
+
+      hideHolders();
+
+      if($(this).text() === answer[count]) {
+          stopTime();
+          isSelected = true;
+          $("#answer-holder").show();
+          $("#answer-holder").html("Right! The answer is: " + answer[count]);
+          displayImage();
+          correct++;
+          count++;
+      }
+      else {
+          stopTime();
+          isSelected = true;
+          $("#answer-holder").show();
+          $("#answer-holder").html("Wrong! The answer is: " + answer[count]);
+          displayImage();
+          incorrect++;
+          count++;
+      } 
+
+      checkGameEnd();  
+  }
+
+// Chekc End Game Function
+  function checkGameEnd() {
+      if(count === question.length) {
+          $("#time-holder").hide();
+          showResults();
+          count = 0;
+          $(".start").show();
+          $(".start").on("click", function() {
+              resetResults();
+              startGame();
+          });
+      }
+  }
+
+  function resetTime() {
+      time = 31;
+  }
+
+  function displayTime() {
+      time--;
+      $("#time-holder").html("Time remaining: " + time);
+    
+          if(time <= 0) {
+              hideHolders();
+              stopTime();
+              $("#answer-holder").show();
+              $("#answer-holder").html("Time is up! The answer is: " + answer[count]);
+              displayImage();
+              unanswered++;
+              count++;
+              checkGameEnd();
+          }
+  }
+
+  function startTime() {
+      clearInterval(ticker);
+      ticker = setInterval(displayTime, 1000);
+  }
+  function stopTime() {
+      clearInterval(ticker);
+      resetTime();
+      if(count < question.length - 1) {
+          setTimeout(startTime, 2000);
+          setTimeout(displayQuestion, 3000);
+      }
+  }
+
+  resetTime();
+
+// Display Images With Answer
+  function displayImage() {
+      if(count === 0) {
+          $("#image-holder").show();
+          $("#image-holder").html('<img src="assets/images/tom_marvolo_riddle.jpg">');
+      }
+      else if(count === 1) {
+          $("#image-holder").show();
+          $("#image-holder").html('<img src="assets/images/armando_dippet.jpg">');
+      }
+      else if(count === 2) {
+          $("#image-holder").show();
+          $("#image-holder").html('<img src="assets/images/helena_ravenclaw.png">');
+      }
+      else if(count === 3) {
+          $("#image-holder").show();
+          $("#image-holder").html('<img src="assets/images/merope_gaunt.png">');
+      }
+      else if(count === 4) {
+          $("#image-holder").show();
+          $("#image-holder").html('<img src="assets/images/snitch.jpg">');
+      }
+      else if(count === 5) {
+          $("#image-holder").show();
+          $("#image-holder").html('<img src="assets/images/phoenix.jpg">');
+      }
+      else if(count === 6) {
+          $("#image-holder").show();
+          $("#image-holder").html('<img src="assets/images/lion.jpg">');
+      }
+      else if(count === 7) {
+          $("#image-holder").show();
+          $("#image-holder").html('<img src="assets/images/neville_longbottom.jpg">');
+      }
+  }
+
+// Show Results Function   
+  function showResults() {
+      $("#correct-holder").show();
+      $("#correct-holder").html("Correct: " + correct);
+      $("#incorrect-holder").show();
+      $("#incorrect-holder").html("Incorrect: " + incorrect);
+      $("#unanswered-holder").show();
+      $("#unanswered-holder").html("Unanswered: " + unanswered);
+      $("#restart-holder").show();
+      $("#restart-holder").html("Click Start above to play again!");
+  }
+
+// Reset Results Function 
+  function resetResults() {
+      correct = 0;
+      incorrect = 0;
+      unanswered = 0;
+  }
+
+// Start Game Function
+  function startGame() {
+      $(".start").hide();
+      startTime();
+      displayQuestion();
+  }
+
+// Start Game On Click
+$(".start").on("click", function() {
+  startGame();
 });
-
-$('#startOverBtn').on('click', function(){
-	$(this).hide();
-	newGame();
-});
-
-function newGame(){
-	$('#finalMessage').empty();
-	$('#correctAnswers').empty();
-	$('#incorrectAnswers').empty();
-	$('#unanswered').empty();
-	currentQuestion = 0;
-	correctAnswer = 0;
-	incorrectAnswer = 0;
-	unanswered = 0;
-	newQuestion();
-}
-
-function newQuestion(){
-	$('#message').empty();
-	$('#correctedAnswer').empty();
-	$('#gif').empty();
-	answered = true;
-	
-	//sets up new questions & answerList
-	$('#currentQuestion').html('Question #'+(currentQuestion+1)+'/'+triviaQuestions.length);
-	$('.question').html('<h2>' + triviaQuestions[currentQuestion].question + '</h2>');
-	for(var i = 0; i < 4; i++){
-		var choices = $('<div>');
-		choices.text(triviaQuestions[currentQuestion].answerList[i]);
-		choices.attr({'data-index': i });
-		choices.addClass('thisChoice');
-		$('.answerList').append(choices);
-	}
-	countdown();
-	//clicking an answer will pause the time and setup answerPage
-	$('.thisChoice').on('click',function(){
-		userSelect = $(this).data('index');
-		clearInterval(time);
-		answerPage();
-	});
-}
-
-function countdown(){
-	seconds = 15;
-	$('#timeLeft').html('<h3>Time Remaining: ' + seconds + '</h3>');
-	answered = true;
-	//sets timer to go down
-	time = setInterval(showCountdown, 1000);
-}
-
-function showCountdown(){
-	seconds--;
-	$('#timeLeft').html('<h3>Time Remaining: ' + seconds + '</h3>');
-	if(seconds < 1){
-		clearInterval(time);
-		answered = false;
-		answerPage();
-	}
-}
-
-function answerPage(){
-	$('#currentQuestion').empty();
-	$('.thisChoice').empty(); //Clears question page
-	$('.question').empty();
-
-	var rightAnswerText = triviaQuestions[currentQuestion].answerList[triviaQuestions[currentQuestion].answer];
-	var rightAnswerIndex = triviaQuestions[currentQuestion].answer;
-	$('#gif').html('<img src = "assets/images/'+ gifArray[currentQuestion] +'.gif" width = "400px">');
-	//checks to see correct, incorrect, or unanswered
-	if((userSelect == rightAnswerIndex) && (answered == true)){
-		correctAnswer++;
-		$('#message').html(messages.correct);
-	} else if((userSelect != rightAnswerIndex) && (answered == true)){
-		incorrectAnswer++;
-		$('#message').html(messages.incorrect);
-		$('#correctedAnswer').html('The correct answer was: ' + rightAnswerText);
-	} else{
-		unanswered++;
-		$('#message').html(messages.endTime);
-		$('#correctedAnswer').html('The correct answer was: ' + rightAnswerText);
-		answered = true;
-	}
-	
-	if(currentQuestion == (triviaQuestions.length-1)){
-		setTimeout(scoreboard, 5000)
-	} else{
-		currentQuestion++;
-		setTimeout(newQuestion, 5000);
-	}	
-}
-
-function scoreboard(){
-	$('#timeLeft').empty();
-	$('#message').empty();
-	$('#correctedAnswer').empty();
-	$('#gif').empty();
-
-	$('#finalMessage').html(messages.finished);
-	$('#correctAnswers').html("Correct Answers: " + correctAnswer);
-	$('#incorrectAnswers').html("Incorrect Answers: " + incorrectAnswer);
-	$('#unanswered').html("Unanswered: " + unanswered);
-	$('#startOverBtn').addClass('reset');
-	$('#startOverBtn').show();
-	$('#startOverBtn').html('Start Over?');
-}
