@@ -1,225 +1,226 @@
-// Define variable
-  var count = 0;
-  var time = 31;
-  var isSelected = false;
-  var ticker;
-  var correct = 0;
-  var incorrect = 0;
-  var unanswered = 0;
+$(document).ready(function() {
 
-// Questions and Answer Arrays
-  var question = ["What is Lord Voldemort's real name?",
-  "Who was Dumbledore's immediate predecessor as Headmaster or Headmistress at Hogwarts?", "Whose mother was Rowena Ravenclaw?", "What was Voldemort's mother's maiden name?", "How many points is the Golden Snitch worth?",
-  "What is the only antidote to Basilisk's venom?", "What is the symbol for Gryffindor house?", "Who destroyed the last remaining Horcrux?"];
-  var answer = ["Tom Marvolo Riddle", "Armando Dippet", "The Grey Lady", "Gaunt", "150", "Phoenix Tears", "A Lion", "Neville Longbottom", "A Lion", "Neville Longbottom"];
-  var firstChoice = ["Tom Marvolo Riddle", "Phineas Nigellus Black", "Moaning Myrtle", "Riddle", "50", "Phoenix Tears", "A Badger", "Ginny Weasley"];
-  var secondChoice = ["Gellert Grindelwald", "Dexter Fortescue", "Lily Potter", "Clearwater", "500", "Dragon's Blood", "An Eagle", "Neville Longbottom"];
-  var thirdChoice = ["Salazar Slytherin", "Armando Dippet", "The Grey Lady", "Peverell", "100", "Mandrake Draught", "A Lion", "Severus Snape"];
-  var fourthChoice = ["Morfin Gaunt", "Dilys Derwent", "The Fat Lady", "Gaunt", "150", "A Bezoard", "A Snake", "Viktor Krum"];
+  // Collect Questions and Answers
 
-// Show & Hide Functions
-  function showHolders() {
-      $("#question-holder").show();
-      $("#option1").show();
-      $("#choice-holder-2").show();
-      $("#choice-holder-3").show();
-      $("#choice-holder-4").show();
-  }
-  function hideHolders() {
-      $("#question-holder").hide();
-      $("#option1").hide();
-      $("#choice-holder-2").hide();
-      $("#choice-holder-3").hide();
-      $("#choice-holder-4").hide();
-  }
-  function hideResults() {
-      $("#correct-holder").hide();
-      $("#incorrect-holder").hide();
-      $("#unanswered-holder").hide();
-      $("#restart-holder").hide();
-  }
-  function displayQuestion () {
-      hideResults();
-      $("#answer-holder").hide();
-      $("#image-holder").hide();
-      $("#time-holder").show();
-      showHolders();
-      $("#question-holder").html(question[count]);
-      $("#option1").html(firstChoice[count]);
-      $("#choice-holder-2").html(secondChoice[count]);
-      $("#choice-holder-3").html(thirdChoice[count]);
-      $("#choice-holder-4").html(fourthChoice[count]);
+    // Show only New Game info on page load
+  $('.game').hide();
+  $('.results').hide();
+  // Create HTML for game
+
+  // Set Variables
   
-  // Hover CSS
-      $("#option1").hover(function() {
-          $(this).css("color", "gray");
-      },
-      function(){
-          $(this).css("color", "black");
-      });
-      $("#choice-holder-2").hover(function() {
-          $(this).css("color", "gray");
-      },
-      function(){
-          $(this).css("color", "black");
-      });
-      $("#choice-holder-3").hover(function() {
-          $(this).css("color", "gray");
-      },
-      function(){
-          $(this).css("color", "black");
-      });
-      $("#choice-holder-4").hover(function() {
-          $(this).css("color", "gray");
-      },
-      function(){
-          $(this).css("color", "black");
-      });
-  }
-  $("#option1").on("click", checkAnswer);
-  $("#choice-holder-2").on("click", checkAnswer);
-  $("#choice-holder-3").on("click", checkAnswer);
-  $("#choice-holder-4").on("click", checkAnswer);
+  var correct;
+  var wrong;
+  var answer;
+  var counter;
+  var count;
+  var timeout;
+  var i = 0;
 
-// Check Answer Function
-  function checkAnswer() {
-
-      hideHolders();
-
-      if($(this).text() === answer[count]) {
-          stopTime();
-          isSelected = true;
-          $("#answer-holder").show();
-          $("#answer-holder").html("Right! The answer is: " + answer[count]);
-          displayImage();
-          correct++;
-          count++;
-      }
-      else {
-          stopTime();
-          isSelected = true;
-          $("#answer-holder").show();
-          $("#answer-holder").html("Wrong! The answer is: " + answer[count]);
-          displayImage();
-          incorrect++;
-          count++;
-      } 
-
-      checkGameEnd();  
+  var activeQuestion = {
+    question: "",
+    answer: '',
+    choices: [],
   }
 
-// Chekc End Game Function
-  function checkGameEnd() {
-      if(count === question.length) {
-          $("#time-holder").hide();
-          showResults();
-          count = 0;
-          $(".start").show();
-          $(".start").on("click", function() {
-              resetResults();
-              startGame();
-          });
-      }
-  }
+var questions = {};
+function setQuestions() {
+  questions ={
 
-  function resetTime() {
-      time = 31;
-  }
+    q1: {
+      question: "What animal is the national emblem of Canada?",
+      answer: 'Beaver',
+      choices: ['Moose', 'Wolf', 'Beaver', 'Eagle'],
+     },
 
-  function displayTime() {
-      time--;
-      $("#time-holder").html("Time remaining: " + time);
+     q2: {
+      question: "How many players are there in a baseball team?",
+      answer: '9',
+      choices: ['20', '12', '9', '10'],
+     },
+
+     q3: {
+      question: "What is the name of Batman's butler?",
+      answer: 'Alfred',
+      choices: ['Horris', 'Chipper', 'Alfred', 'Jeffry'],
+     },
+
+     q4: {
+      question: "The Pyrenees mountain range separates which two European countries?",
+      answer: 'France and Spain',
+      choices: ['Italy and Switzerland', 'Germany and Holland', 'Canada and The United States', 'America and Mexico'],
+     },
+
+     q5: {
+      question: "In Fahrenheit, at what temperature does water freeze?",
+      answer: '32 degrees Fahrenheit',
+      choices: ['13', '23', '31', '32'],
+     
+    },
+
+    q6: {
+     question: "The Statue of Liberty was given to the US by which country?",
+     answer: 'France',
+     choices: ['Canada', 'France', 'England', 'Japan'],
+    },
+
+    q7: {
+    question: "According to Greek mythology who was the first woman on earth?",
+    answer: 'Pandora',
+    choices: ['Pandora', 'Aphrodite', 'Helena', 'Eve'],
+   },
+
+    q8: {
+    question: "How many letters are there in the German alphabet?",
+    answer: '30',
+    choices: ['24', '26', '30', '70'],
+  },
+
+  q9: {
+    question: "According to legend, who led a gang of merry outlaws in Sherwood Forest in Nottingham, England?",
+    answer: 'Robin Hood',
+    choices: ['Batman', 'Arrow', 'Puss in Boots', 'Robin Hood'],
+  },
+  q10: {
+    question: "In which continent is the country of Egypt found?",
+    answer: 'Africa',
+    choices: ['Asia', 'Europe', 'Micronesia', 'Africa'],
+  },
+
+}
+};
+
+ // Timer Settings
+ var questionTimer = {
+  //Time Per Question
+  time: 15,
+  reset: function(t) {
+    questionTimer.time = t;
+    $('.timeLeft').html('Time Left: ' + questionTimer.time);
+  },
+  gameTimeout: function(){
+    timeout = setTimeout(questionTimer.timeUp, 1000*16);
+  },
+  count: function() {
+    $('.timeLeft').html('Time Left: ' +questionTimer.time);
+    questionTimer.time--;
+  },
+  countDown: function(){
+    counter = setInterval(questionTimer.count,1000);
+  },
+  stopTimer: function(){
+    clearInterval(counter);
+  },
+  timeUp: function(){
+    wrong++;
+    questionTimer.reset(5)
+    $('.answers').html('<h2>Incorrect! The answer is ' + activeQuestion.answer + ' </h2>');
+    setTimeout(game, 5000);
+  },
+};
+
+// Run this to make sure there are still questions left
+function gameOver() {
+  if (Object.keys(questions).length === 0) {
+    questionTimer.stopTimer();
+    $('.game').hide();
+    $('.results').show();
+    $('.correct').html('Number Correct: ' + correct);
+    $('.wrong').html('Number Incorrect: ' + wrong);
+    activeQuestion = false;
+  };
+};
+
+// Check if selected answer is correct or incorrect
+function answerCheck() {
+  if (answer == activeQuestion.answer && questionTimer.time > 0) {
+    correct++;
+    questionTimer.reset(5);
+    $('.answers').html('<h2>Correct! The answer is ' + activeQuestion.answer + ' </h2>');
+    setTimeout(game, 5000);   
+  }
     
-          if(time <= 0) {
-              hideHolders();
-              stopTime();
-              $("#answer-holder").show();
-              $("#answer-holder").html("Time is up! The answer is: " + answer[count]);
-              displayImage();
-              unanswered++;
-              count++;
-              checkGameEnd();
-          }
+  if (answer != activeQuestion.answer){
+    questionTimer.timeUp();
   }
+}
 
-  function startTime() {
-      clearInterval(ticker);
-      ticker = setInterval(displayTime, 1000);
-  }
-  function stopTime() {
-      clearInterval(ticker);
-      resetTime();
-      if(count < question.length - 1) {
-          setTimeout(startTime, 2000);
-          setTimeout(displayQuestion, 3000);
-      }
-  }
+ //Randomize order of possible answers
+function randomize() {
+  activeQuestion.choices.sort(function() { 
+    return 0.5 - Math.random(); 
+  });
+};
 
-  resetTime();
+// Starts up the game
+function game(){
 
-// Display Images With Answer
-  function displayImage() {
-      if(count === 0) {
-          $("#image-holder").show();
-          $("#image-holder").html('<img src="assets/images/tom_marvolo_riddle.jpg">');
-      }
-      else if(count === 1) {
-          $("#image-holder").show();
-          $("#image-holder").html('<img src="assets/images/armando_dippet.jpg">');
-      }
-      else if(count === 2) {
-          $("#image-holder").show();
-          $("#image-holder").html('<img src="assets/images/helena_ravenclaw.png">');
-      }
-      else if(count === 3) {
-          $("#image-holder").show();
-          $("#image-holder").html('<img src="assets/images/merope_gaunt.png">');
-      }
-      else if(count === 4) {
-          $("#image-holder").show();
-          $("#image-holder").html('<img src="assets/images/snitch.jpg">');
-      }
-      else if(count === 5) {
-          $("#image-holder").show();
-          $("#image-holder").html('<img src="assets/images/phoenix.jpg">');
-      }
-      else if(count === 6) {
-          $("#image-holder").show();
-          $("#image-holder").html('<img src="assets/images/lion.jpg">');
-      }
-      else if(count === 7) {
-          $("#image-holder").show();
-          $("#image-holder").html('<img src="assets/images/neville_longbottom.jpg">');
-      }
-  }
+  // Checks to see if there are no more questions first
+  gameOver();
 
-// Show Results Function   
-  function showResults() {
-      $("#correct-holder").show();
-      $("#correct-holder").html("Correct: " + correct);
-      $("#incorrect-holder").show();
-      $("#incorrect-holder").html("Incorrect: " + incorrect);
-      $("#unanswered-holder").show();
-      $("#unanswered-holder").html("Unanswered: " + unanswered);
-      $("#restart-holder").show();
-      $("#restart-holder").html("Click Start above to play again!");
-  }
+  // If there are still questions left
+  if (Object.keys(questions).length > 0) {
 
-// Reset Results Function 
-  function resetResults() {
-      correct = 0;
-      incorrect = 0;
-      unanswered = 0;
-  }
+    // Get Question
+    var keys = Object.keys(questions);
+    var objIndex = keys[ keys.length * Math.random() << 0];
+    activeQuestion = questions[objIndex];
 
-// Start Game Function
-  function startGame() {
-      $(".start").hide();
-      startTime();
-      displayQuestion();
-  }
+    // Reorder the choices so it's not obvious
+    randomize();
 
-// Start Game On Click
-$(".start").on("click", function() {
-  startGame();
+    // Delete question so it can't be pulled again
+    delete questions[objIndex];
+
+    // Empty out answer area from previous question
+    $('.answers').empty();
+
+    // Stop and Reset timer incase it was running
+    questionTimer.stopTimer();
+    questionTimer.reset(15);
+    questionTimer.gameTimeout()
+
+    // Start Timer
+    questionTimer.countDown();
+
+    // Place question information into .game area
+    $('.question').html(activeQuestion.question);
+    // Reset counter
+    i=0;
+
+    //Create buttons for possible answers
+    $(activeQuestion.choices).each(function() {
+    $('.answers').append('<button class="btn btn-lg option text-center">' + activeQuestion.choices[i] + '</button>');
+    i++;
+    });
+  }; 
+
+  // When you click on a possible answer
+  $('.option').on('click', function(){
+      answer = $(this).html();
+      answerCheck();
+      clearTimeout(timeout);
+    });
+};
+
+ // New Game Function
+  // Resets score to zero
+  // Sets new time countdown
+function newGame() {
+  $('.results').hide();
+  // questions = questionInfo;
+  correct = 0;
+  wrong = 0;
+  $('.game').show();
+}
+
+
+$('.home').on('click','.start',function(){
+  setQuestions();
+  newGame();
+  
+  game();
+});
+    
+
 });
