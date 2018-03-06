@@ -3,7 +3,7 @@ body {
 }
 #countdownContainer {
 position: absolute;
-top: 78%;
+top: 71%;
 left: 70%;
 text-align: center;
 transform: translateX(-80%) translateY(-70%);
@@ -28,7 +28,7 @@ font-family: "sans-serif";
   border-radius: 50px;
   border: 2px solid #5F9EA0;
   box-shadow: 10px 15px 5px #5F9EA0;
-  background-image: url(assets/wood.jpg);
+
 }
 
 .grid h1 {
