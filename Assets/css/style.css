@@ -1,144 +1,83 @@
-@import url(https://fonts.googleapis.com/css?family=Droid+Sans);
-/* Variables */
-* {
-  box-sizing: border-box;
+body {
+  background-color: #eeeeee;
+}
+#countdownContainer {
+position: absolute;
+top: 78%;
+left: 70%;
+text-align: center;
+transform: translateX(-80%) translateY(-70%);
+background-color: #FFFFFF;
+color: #ffffff;
+width: 50px;
+font-size: 16px;
+color: #708090;
+border: 1px solid #D3D3D3;
+border-radius: 50px;
+margin: 10px 50px 10px 0px;
+padding: 10px 10px;
+font-family: "sans-serif";
 }
 
-html,
-body {
-  width: 100%;
-  height: 100%;
+.grid {
+  width: 600px;
+  height: 500px;
+  margin: 0 auto;
+  background-color: #F0F8FF;
+  padding: 10px 50px 50px 50px;
+  border-radius: 50px;
+  border: 2px solid #5F9EA0;
+  box-shadow: 10px 15px 5px #5F9EA0;
+  background-image: url(assets/wood.jpg);
 }
 
-body {
-  position: fixed;
+.grid h1 {
+  font-family: "sans-serif";
+  background-color: #8FBC8F;
+  font-size: 60px;
   text-align: center;
-  color:gray;
-  background: turquoise;
-  font-family: 'Droid Sans', sans-serif;
-  /* No highlight on text */
-  -webkit-touch-callout: none;
-  /* iOS Safari */
-  -webkit-user-select: none;
-  /* Chrome/Safari/Opera */
-  /* Konqueror */
-  -moz-user-select: none;
-  /* Firefox */
-  -ms-user-select: none;
-  /* Internet Explorer/Edge */
-  user-select: none;
-  /* Non-prefixed version, currently not supported by any browser */
+  color: #ffffff;
+  padding: 2px 0px;
+  border-radius: 50px;
 }
 
-a {
-  position: relative;
-  display: block;
-  padding: 0.5vh;
-  margin: 2vh auto;
-  border: 2px solid white;
-  border-radius: 5px;
+#score {
+  color: #5A6772;
+  text-align: center;
+  font-size: 30px;
+}
+
+.grid #question {
+  font-family: "monospace";
+  font-size: 30px;
+  color: #5A6772;
+}
+
+.buttons {
+  margin-top: 30px;
+}
+
+#btn0, #btn1, #btn2, #btn3 {
+  background-color: #8FBC8F;
+  width: 250px;
+  font-size: 20px;
+  color: #fff;
+  border: 1px solid #D3D3D3;
+  border-radius: 50px;
+  margin: 10px 40px 10px 0px;
+  padding: 10px 10px;
+}
+
+#btn0:hover, #btn1:hover, #btn2:hover, #btn3:hover {
   cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
+  background-color: #98FB98;
 }
 
-a:hover, a:active, a:focus {
-  border: 2px solid;
-  font-weight: bold;
-  background: none;
+#btn0:focus, #btn1:focus, #btn2:focus, #btn3:focus {
+  outline: 0;
 }
 
-header h1 {
-  font-size: 4.5vw;
-  font-weight: bold;
-}
-
-header h2 {
-  font-size: 2vw;
-  font-style: italic;
-  text-align: left;
-  margin: 3vh 0;
-  border-top: 1px solid navy;
-  padding: 2vh 0;
-}
-
-header p {
-  font-size: 3vw;
-  margin-bottom: 5vh;
-}
-
-button {
-  color: white;
-  border: 1px solid;
-  border-radius: 3px;
-  padding: 1vh;
-  cursor: pointer;
-  font-size: 3vh;
-  -webkit-tap-highlight-color: transparent;
-}
-
-button:hover, button:active, button:focus {
-  opacity: 0.8;
-  outline: none;
-}
-
-.start {
-  background-color: rgb(255, 0, 98);
-  border-color: white;
-}
-
-.wrapper {
-  position: absolute;
-  width: 70vw;
-  height: 70vh;
-  top: 15%;
-  left: 15%;
-  background: white;
-  border-radius: 3px;
-}
-
-.text {
-  position: absolute;
-  width: 80%;
-  height: 80%;
-  top: 10%;
-  left: 10%;
-}
-
-.holder h1 {
-  font-size: 8vh;
-  padding-bottom: 5vh;
-}
-
-.holder h2 {
-  font-size: 4vh;
-  padding-bottom: 5vh;
-}
-
-.holder .number, .holder .timer {
-  position: absolute;
-  color: white;
-  width: 100%;
-  font-size: 5vh;
-}
-
-.holder .number {
-  top: -15vh;
-}
-
-.holder .timer {
-  bottom: -15vh;
-}
-
-.holder .question {
-  font-size: 4vh;
-  padding-bottom: 5vh;
-  border-bottom: 1px solid;
-  borderBottomColor: blue;
-  line-height: 5vh;
-}
-
-.holder .answers {
-  font-size: 4.5vh;
-  width: 70%;
-  margin: 7vh auto;
+#progress {
+  color: #2b2b2b;
+  font-size: 18px;
 }

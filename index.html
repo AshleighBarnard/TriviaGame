@@ -1,44 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <!-- font awesome comes to the party -->
-  <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
-  <!-- attaching mystylesheet -->
-  <link rel="stylesheet" type="text/css" href="assets/css/style.css">
-  <!-- Media Queries -->
-	<meta name="viewport" content="width=device-width, user-scalable=no" />
-  <!-- google fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Permanent+Marker" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Shadows+Into+Light+Two" rel="stylesheet">
-  <!-- Title -->
-  <title>Ashleigh's Trivia Madness</title>
-</head>
-
-<body>
-
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Ashleigh's Trivia Quiz</title>
+    <link rel="stylesheet" href="assets/css/style.css" type="text/css">
+  </head>
   <body>
-    <div class="wrapper">
-      <div class="text">
-        <header>
-          <h1><i class="fa fa-quote-left"></i> Famous Quote Trivia <i class="fa fa-quote-right"></i></h1>
-          <h2>Instructions:</h2>
-          <p>You have 30 seconds to select the author or movie of the famous quote. There will be 10 questions. Let's see how many you get right!</p>
-        </header>
-        <div class="holder"></div>
-      </div>
-    </div>
+    <body>
+        <div class="grid">
+            <div id="quiz">
+                <h1>Trivia General Knowledge</h1>
+                <hr style="margin-bottom: 20px">
+<!-- table -->
+              <table id="countdownContainer">
+              <tr>
+              <td colspan="2"></td>
+              </tr>
+              <tr>
+                  <td id="minutes">4</td>
+                  <td id="seconds">59</td>
+                </tr>
+                <tr>
+                    <td> Minutes </td>
+                    <td> Seconds </td>
+                </tr>
+              </table>
+<!-- end table -->
+                <p id="question"></p>
 
-    <script
-    src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
-    crossorigin="anonymous"></script>
-   
-  <script type="text/javascript" src="Assets/javascript/app.js"></script>
-  <!-- jQuery -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
-</body>
+                <div class="buttons">
+                    <button id="btn0"><span id="choice0"></span></button>
+                    <button id="btn1"><span id="choice1"></span></button>
+                    <button id="btn2"><span id="choice2"></span></button>
+                    <button id="btn3"><span id="choice3"></span></button>
+                </div>
 
+                <hr style="margin-top: 50px">
+                <footer>
+                    <p id="progress">Question x of y</p>
+                </footer>
+            </div>
+        </div>
+
+
+<script src="assets/javascript/question.js"></script>
+<script src="assets/javascript/quiz_controller.js"></script>
+<script src="assets/javascript/app.js"></script>
+
+  </body>
 </html>
